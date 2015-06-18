@@ -12,7 +12,6 @@
             'Jasmine.view.main.Main'
         ],
 
-
         onLaunch: function () {
             //<debug>
             console.warn('[ROOT CONTROLLER] - on launch...');
@@ -49,10 +48,16 @@
             //by default the dynamic loading works in the dev mode. in order to also make it work in the production, one needs to make sure
             //the actual app js stuff is also copied into the app's build dir
 
-
+            //load the test runner. it will handle all the test related stuff
+            Ext.require(
+                'Jasmine.test.Runner',
+                function(){
+                    Ext.create('Jasmine.test.Runner');
+                },
+                this
+            );
         }
 
     });
-
 
 }());
