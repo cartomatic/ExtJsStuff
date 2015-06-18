@@ -17,11 +17,6 @@
             console.warn('[ROOT CONTROLLER] - on launch...');
             //</debug>
 
-            //create the app's viewport
-            this.viewport = Ext.create('Ext.container.Viewport', {
-                layout: 'fit'
-            });
-
             //check if should handle the normal startup or kick in with the tests mode
             var hash = window.location.hash.replace('#', '');
 
@@ -30,9 +25,13 @@
             }
             else {
                 //normal app startup
-                this.viewport.add(
-                    Ext.create('Jasmine.view.main.Main')
-                );
+                //create the app's viewport
+                this.viewport = Ext.create('Ext.container.Viewport', {
+                    layout: 'fit',
+                    items: [
+                        Ext.create('Jasmine.view.main.Main')
+                    ]
+                });
             }
         },
 
