@@ -6,9 +6,10 @@
 Ext.application({
     name: 'Jasmine',
 
-    extend: 'Jasmine.Application',
-    
-    autoCreateViewport: 'Jasmine.view.main.Main'
+    extend: 'Jasmine.Application'
+
+    //Do not auto create create a viewport. This is handled by the Root controller
+    //autoCreateViewport: 'Jasmine.view.main.Main'
 	
     //-------------------------------------------------------------------------
     // Most customizations should be made to Jasmine.Application. If you need to
