@@ -97,7 +97,8 @@
                         xtype: 'panel',
                         title: 'Jasmine output in an ExtJs panel...',
                         layout: 'fit',
-                        html: '<div id="new_jasmine_reporter_output_container" style="width:100%; height:100%;"></div>'
+                        html: '<div id="new_jasmine_reporter_output_container" style="width:100%; height:100%;"></div>',
+                        overflowY: 'auto'
                     }
                 ]
             });
@@ -109,15 +110,37 @@
             //this will replace the new_jasmine_reporter_output_container with the html reporter
             Ext.get(document.getElementsByClassName('jasmine_html-reporter')[0]).replace(Ext.get('new_jasmine_reporter_output_container'));
 
+            console.warn('[TEST RUNNER] - Jasmine HTML reporter output container created!');
+
+
 
             //since got here, can actually start loading tests as all the required stuff should be available
 
+            console.warn('[TEST RUNNER] - loading tests...');
+
+
             describe("Test suite", function() {
+
+                //run a couple of tasks
+
+                for(var i = 0; i < 40; i++){
+                    (function(value1, value2){
+                        describe("Test suite " + value1, function() {
+                            it("contains spec with an expectation - " + value1 + ' to be equal ' + value2, function () {
+                                expect(value1).toEqual(value2);
+                            });
+                        })
+                    })(i, i);
+                }
 
             });
 
+            console.warn('[TEST RUNNER] - tests loaded!');
+
+
 
             //and finally run the tests
+            console.warn('[TEST RUNNER] - starting tests...');
             this.jasmineEnv.execute();
 
         },
@@ -128,6 +151,9 @@
         bootJasmine: function(){
 
             var me = this;
+
+            //Note:
+            //this is based on the jasmine 2.3.4 boot.js
 
             /**
              Starting with version 2.0, this file "boots" Jasmine, performing all of the necessary initialization before executing the loaded environment and all of a project's specs. This file should be loaded after `jasmine.js` and `jasmine_html.js`, but before any project source files or spec files are loaded. Thus this file can also be used to customize Jasmine for a project.
