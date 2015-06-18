@@ -18,9 +18,11 @@
             //</debug>
 
             //check if should handle the normal startup or kick in with the tests mode
-            var hash = window.location.hash.replace('#', '');
+            var hash = window.location.hash.replace('#', ''),
+                query = Ext.Object.fromQueryString(window.location.search);
 
-            if(hash === 'selftest'){
+            //in order to determine if testing should be initialised, check for the hash and some query string params presence - query params are added by jasmine
+            if(hash === 'selftest' || query.hasOwnProperty('spec') || query.hasOwnProperty('cath') || query.hasOwnProperty('throwFailures')){
                 this.doSelfTest();
             }
             else {
