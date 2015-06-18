@@ -18,9 +18,7 @@ temp/
 .sencha/
 .sass-cache/
 .sencha_backup/
-#yes, exclude ext framework
 ext/
-#yes, exclude touch framework
 touch/
 temp/
 build/
