@@ -256,29 +256,62 @@
         loadTests: function(suiteName, tests){
 
             //since got here, can actually start loading tests as all the required stuff should be available
+            //all the tests are actually extjs classes, so need to load them in order to load the actual tests
 
-            console.warn('[TEST RUNNER] - loading tests...');
+            var me = this,
+                t, tlen, T;
+
+            //if tests are not provided, make sure to extract them from config (if provided of course)
+            tests = tests || me.getTests();
+
+            //see what is the main test suite name
+            suiteName = suiteName || me.getDefaultTestSuiteName();
 
 
-            describe("Test suite", function() {
+            //only load tests if there is something to load
+            if(tests){
 
-                //run a couple of tasks
-
-                for(var i = 0; i < 40; i++){
-                    (function(value1, value2){
-                        describe("Test suite " + value1, function() {
-                            it("contains spec with an expectation - " + value1 + ' to be equal ' + value2, function () {
-                                expect(value1).toEqual(value2);
-                            });
-                        })
-                    })(i, i);
+                //make sure the tests is an array
+                if(!Ext.isArray(tests)){
+                    tests = [tests];
                 }
 
-            });
+                Ext.require(
+                    tests,
+                    function(){
 
-            console.warn('[TEST RUNNER] - tests loaded!');
+                        //all the tests should be valid ext js classes.
+                        //they should also expose a load method
+                        t = 0;
+                        tlen = tests.length;
 
-            this.fireEvent('testsloaded', this);
+                        if(tlen > 0){
+
+                            describe(suiteName, function(){
+                                for(t; t < tlen; t++){
+
+                                    console.warn('[TEST RUNNER] - loading tests for ' + tests[t]);
+
+                                    T = Ext.create(tests[t]);
+                                    if(Ext.isFunction(T.load)){
+                                        T.load();
+                                    }
+                                }
+                            });
+                        }
+
+                        console.warn('[TEST RUNNER] - tests loaded!');
+
+                        me.fireEvent('testsloaded', me);
+                    },
+                    me
+                );
+            }
+            else {
+                //just give feedback is some code is subscribing;
+                //when there are no tests, jasmine will give an appropriate output;
+                me.fireEvent('testsloaded', me);
+            }
         },
 
         /**
