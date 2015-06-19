@@ -21,7 +21,11 @@
             //get the query params, so can dynamically adjust where the tests will be executed
             //this may be handy if the tests need ui for example
             var query = Ext.Object.fromQueryString(window.location.search),
-                testRunnerCfg;
+                testRunnerCfg,
+                tests = [
+                    'Jasmine.test.Simple',
+                    'Jasmine.test.Async'
+                ];
 
             //check if should handle the normal startup or kick in with the tests mode
             if(Jasmine.util.TestRunner.isInTestMode()){
@@ -30,7 +34,9 @@
                 //it is possible to customise this and display the jasmine output on the side or actually in any container
 
                 //the default will run test runner with the standard output generated instead of the app
-                testRunnerCfg = {};
+                testRunnerCfg = {
+                    tests: tests
+                };
 
                 //display tests on the side
                 if(query.hasOwnProperty('testsonside') && query['testsonside']){
@@ -47,11 +53,12 @@
                             },
                             {
                                 xtype: 'panel',
-                                region: 'east',
-                                width: 300,
+                                region: 'south',
+                                height: 300,
                                 html: '<div id="jasmine_output" style="width:100%; height:100%;"></div>',
                                 overflowY: true,
-                                split: true
+                                split: true,
+                                title: 'Jasmine output'
                             }
                         ]
                     });
