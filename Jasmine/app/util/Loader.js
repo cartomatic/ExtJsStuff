@@ -10,19 +10,64 @@
 
         singleton: true,
 
-        constructor: function(){
+        constructor: function(){},
 
+        /**
+         * builds a script or style tag
+         * @param filename
+         * @param callback
+         * @returns {Element}
+         */
+        buildScriptTag: function(filename, callback) {
+            var rnd = '?dc=' + (new Date()).getTime();
+            var exten = filename.substr(filename.lastIndexOf('.')+1);
+            //console.log('Loader.buildScriptTag: filename=[%s], exten=[%s]', filename, exten);
+            if(exten=='js') {
+                var script  = document.createElement('script');
+                script.type = "text/javascript";
+                script.src  = filename + rnd;
+
+                //IE has a different way of handling <script> loads, so we need to check for it here
+                if(script.readyState) {
+                    script.onreadystatechange = function() {
+                        if (script.readyState == "loaded" || script.readyState == "complete") {
+                            script.onreadystatechange = null;
+                            callback();
+                        }
+                    };
+                } else {
+                    script.onload = callback;
+                }
+                return script;
+            }
+            if(exten=='css') {
+                var style = document.createElement('link');
+                style.rel  = 'stylesheet';
+                style.type = 'text/css';
+                style.href = filename + rnd;
+                callback();
+                return style;
+            }
         },
 
         /**
          * Loads scipts or css
          * Modification of http://www.sencha.com/forum/showthread.php?107796-Ext.ux.Loader-Load-js-css-Files-Dynamically
-         * @param {} fileList
-         * @param {} callback
-         * @param {} scope
-         * @param {} preserveOrder
+         * @param cfg {Object} configuration
+         * @param {String|Array} [cfg.fileList]
+         * @param {Function} [cfg.callback]
+         * @param {Object} [cfg.scope]
+         * @param {Boolean} [cfg.preserveOrder] - whether or not scripts should be loaded in the order supplied
          */
-        load: function(fileList, callback, scope, preserveOrder) {
+        load: function(cfg) {
+
+            if(!cfg) return;
+
+            var fileList = cfg.fileList,
+                callback = cfg.callback,
+                scope = cfg.scope,
+                preserveOrder = cfg.preserveOrder;
+
 
             if(!Ext.isArray(fileList)) fileList = [fileList];
 
@@ -69,38 +114,6 @@
                 }, this);
 
                 head.appendChild(fragment);
-            }
-        },
-
-        buildScriptTag: function(filename, callback) {
-            var rnd = '?dc=' + (new Date()).getTime();
-            var exten = filename.substr(filename.lastIndexOf('.')+1);
-            //console.log('Loader.buildScriptTag: filename=[%s], exten=[%s]', filename, exten);
-            if(exten=='js') {
-                var script  = document.createElement('script');
-                script.type = "text/javascript";
-                script.src  = filename + rnd;
-
-                //IE has a different way of handling <script> loads, so we need to check for it here
-                if(script.readyState) {
-                    script.onreadystatechange = function() {
-                        if (script.readyState == "loaded" || script.readyState == "complete") {
-                            script.onreadystatechange = null;
-                            callback();
-                        }
-                    };
-                } else {
-                    script.onload = callback;
-                }
-                return script;
-            }
-            if(exten=='css') {
-                var style = document.createElement('link');
-                style.rel  = 'stylesheet';
-                style.type = 'text/css';
-                style.href = filename + rnd;
-                callback();
-                return style;
             }
         }
     });
