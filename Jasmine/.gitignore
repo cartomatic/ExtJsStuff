@@ -39,3 +39,8 @@ gwt-unitCache
 
 #merge backup files
 *.orig
+
+#################
+#some packages
+#################
+packages/gm
