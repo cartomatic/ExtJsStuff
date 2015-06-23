@@ -10,7 +10,7 @@
 
         requires: [
             'Jasmine.view.main.Main',
-            'Jasmine.util.TestRunner'
+            'gm.core.util.jasmine.TestRunner'
         ],
 
         onLaunch: function () {
@@ -28,7 +28,7 @@
                 ];
 
             //check if should handle the normal startup or kick in with the tests mode
-            if(Jasmine.util.TestRunner.isInTestMode()){
+            if(gm.core.util.jasmine.TestRunner.isInTestMode()){
 
                 //by default the test runner creates its own viewport that is displayed instead of the app
                 //it is possible to customise this and display the jasmine output on the side or actually in any container
@@ -66,7 +66,7 @@
                     testRunnerCfg.outputContainer = 'jasmine_output';
                 }
 
-                Ext.create('Jasmine.util.TestRunner', testRunnerCfg);
+                Ext.create('gm.core.util.jasmine.TestRunner', testRunnerCfg);
             }
             else {
                 //normal app startup
