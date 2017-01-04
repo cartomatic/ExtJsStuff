@@ -17,5 +17,22 @@ Ext.define('WallabyJs.view.main.MainController', {
         if (choice === 'yes') {
             //
         }
+    },
+
+    testMethod: function(input){
+        return input;
+    },
+
+    anotherMethodUnderTest: function(a, b){
+
+        var test = a,
+            testb = b;
+
+
+        return a+b;
+    },
+
+    oneMoreMethod: function() {
+
     }
 });
